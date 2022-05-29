@@ -44,6 +44,7 @@ const updateUserMask = async (req, res, next) => {
     }
 
     const userId = req.user._id;
+    const email = req.user.email;
     const descriptors = req.body.descriptors;
 
     let mask = await Mask.findById(userId);
@@ -52,6 +53,7 @@ const updateUserMask = async (req, res, next) => {
       mask = new Mask({
         _id: mongoose.Types.ObjectId(userId),
         descriptors: descriptors,
+        email: email,
       });
     } else mask.descriptors = descriptors;
 
@@ -71,6 +73,7 @@ const updateMask = async (req, res, next) => {
   try {
     const userId = req.body.userId;
     const descriptors = req.body.descriptors;
+    const email = req.body.email;
 
     if (!userId && !descriptors) throw Error("Invalid Data Provided");
 
@@ -80,6 +83,7 @@ const updateMask = async (req, res, next) => {
       mask = new Mask({
         _id: mongoose.Types.ObjectId(userId),
         descriptors: descriptors,
+        email: email,
       });
     } else mask.descriptors = descriptors;
 

@@ -3,6 +3,9 @@ const Schema = mongoose.Schema;
 
 const maskSchema = new Schema(
   {
+    email: {
+      type: String,
+    },
     descriptors: [],
   },
   { timestamps: true }

@@ -42,7 +42,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     maxAge: 6000000000
-  }
+  },
+  
 }))
 
 app.use(cookieParser('somesupersecretkey'))

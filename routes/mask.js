@@ -11,6 +11,6 @@ router.post("/update", maskController.updateMask);
 router.get("/getUser", maskController.getUserMask);
 
 // POST /mask/updateUser
-router.get("/updateUser", maskController.updateUserMask);
+router.post("/updateUser", maskController.updateUserMask);
 
 module.exports = router;
