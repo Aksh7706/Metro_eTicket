@@ -17,4 +17,7 @@ router.post("/entry", usersController.markEntry);
 // POST /users/exit
 router.post("/exit", usersController.markExit);
 
+// POST /users/exit
+router.post("/accountById", usersController.getUserById);
+
 module.exports = router;

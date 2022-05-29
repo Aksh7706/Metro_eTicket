@@ -32,6 +32,25 @@ const getUser = async (req, res, next) => {
   }
 };
 
+const getUserById = async (req, res, next) => {
+  try {
+    const userId = req.body.userId;
+    if (!userId) {
+      const err = new Error("Please provide a userId.");
+      err.statusCode = 404;
+      throw err;
+    }
+    const user = await User.findById(userId);
+
+    res.status(200).json({
+      message: "User successfully fetched.",
+      user: user,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const updateUser = async (req, res, next) => {
   try {
     if (req.user == null) {
@@ -127,7 +146,7 @@ const markEntry = async (req, res, next) => {
       throw err;
     }
 
-    if(user.entry != -1){
+    if (user.entry != -1) {
       const err = new Error("User Entry Station Already Exists.");
       err.statusCode = 404;
       throw err;
@@ -161,7 +180,7 @@ const markExit = async (req, res, next) => {
       throw err;
     }
 
-    if(user.entry === -1){
+    if (user.entry === -1) {
       const err = new Error("User Entry does not exist.");
       err.statusCode = 404;
       throw err;
@@ -169,12 +188,12 @@ const markExit = async (req, res, next) => {
 
     const entryStnNo = user.entry;
     user.entry = -1;
-    
+
     const transactionHistory = new History({
-      userId : mongoose.Types.ObjectId(userId),
-      source : entryStnNo,
-      destination : exitStnNo,
-    })
+      userId: mongoose.Types.ObjectId(userId),
+      source: entryStnNo,
+      destination: exitStnNo,
+    });
 
     const savedTransactionHistory = await transactionHistory.save();
     const savedUser = await user.save();
@@ -184,7 +203,6 @@ const markExit = async (req, res, next) => {
       user: savedUser,
       transactionHistory: savedTransactionHistory,
     });
-
   } catch (err) {
     next(err);
   }
@@ -192,6 +210,7 @@ const markExit = async (req, res, next) => {
 
 const isLoggedIn = async (req, res, next) => {
   res.send(req.user);
+  console.log("asdasdas", req.user);
 };
 
 exports.getUser = getUser;
@@ -200,3 +219,4 @@ exports.updateBalance = updateBalance;
 exports.markEntry = markEntry;
 exports.markExit = markExit;
 exports.isLoggedIn = isLoggedIn;
+exports.getUserById = getUserById;
