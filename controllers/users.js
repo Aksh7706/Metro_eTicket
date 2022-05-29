@@ -131,6 +131,55 @@ const updateBalance = async (req, res, next) => {
   }
 };
 
+const updateBalanceById = async (req, res, next) => {
+  try {
+    const userId = req.body.userId;
+    const amount = req.body.amount;
+    const type = req.body.type;
+
+    if (!userId) {
+      const err = new Error("Please provide a userId.");
+      err.statusCode = 404;
+      throw err;
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      const err = new Error("Could not find user by id.");
+      err.statusCode = 404;
+      throw err;
+    }
+
+    let currentBalance = user.currentBalance;
+
+    if (type === Withdraw) {
+      if (currentBalance <= 0) {
+        const err = new Error("Insufficient Balance");
+        err.statusCode = 404;
+        throw err;
+      }
+      currentBalance -= amount;
+    } else currentBalance += amount;
+
+    user.currentBalance = currentBalance;
+    user.balanceHistory.push({
+      date: Date.now(),
+      amount: amount,
+      type: type,
+    });
+
+    const savedUser = await user.save();
+
+    res.status(201).json({
+      message: "Balance successfully updated.",
+      user: savedUser,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const markEntry = async (req, res, next) => {
   try {
     const userId = req.body.userId;
@@ -210,7 +259,6 @@ const markExit = async (req, res, next) => {
 
 const isLoggedIn = async (req, res, next) => {
   res.send(req.user);
-  console.log("asdasdas", req.user);
 };
 
 exports.getUser = getUser;
@@ -220,3 +268,4 @@ exports.markEntry = markEntry;
 exports.markExit = markExit;
 exports.isLoggedIn = isLoggedIn;
 exports.getUserById = getUserById;
+exports.updateBalanceById = updateBalanceById;

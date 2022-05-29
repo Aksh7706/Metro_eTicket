@@ -11,6 +11,8 @@ router.get("/isLogin", usersController.isLoggedIn);
 
 router.post("/updateBalance", usersController.updateBalance);
 
+router.post("/updateBalanceById", usersController.updateBalanceById);
+
 // POST /users/entry
 router.post("/entry", usersController.markEntry);
 
