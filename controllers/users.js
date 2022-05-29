@@ -111,7 +111,11 @@ const updateBalance = async (req, res, next) => {
         throw err;
       }
       currentBalance -= amount;
-    } else currentBalance += amount;
+    } else if (type === Deposit) {
+      currentBalance += amount;
+    } else {
+      currentBalance -= amount;
+    }
 
     user.currentBalance = currentBalance;
     user.balanceHistory.push({
@@ -160,7 +164,11 @@ const updateBalanceById = async (req, res, next) => {
         throw err;
       }
       currentBalance -= amount;
-    } else currentBalance += amount;
+    } else if (type === Deposit) {
+      currentBalance += amount;
+    } else {
+      currentBalance -= amount;
+    }
 
     user.currentBalance = currentBalance;
     user.balanceHistory.push({
